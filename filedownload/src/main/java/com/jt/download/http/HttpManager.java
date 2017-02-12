@@ -23,6 +23,11 @@ public class HttpManager {
   public static final int CONTENT_LENGTH_ERROR_CODE = 2;
   public static final String CONTENT_LENGTH_ERROR_MESSAGE = "content length 出错啦！";
 
+  public static final int TASK_RUNNING_ERROR_CODE = 3;
+  public static final String TASK_RUNNING_ERROR_MESSAGE = "任务已经执行了";
+
+
+
   private HttpManager() {
     mClient = new OkHttpClient();
   }
