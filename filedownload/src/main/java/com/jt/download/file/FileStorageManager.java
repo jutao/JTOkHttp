@@ -14,13 +14,15 @@ public class FileStorageManager {
 
   private Context mContext;
 
-  private static FileStorageManager sFileStorageManager = new FileStorageManager();
-
-  public static FileStorageManager getInstance() {
-    return sFileStorageManager;
+  private FileStorageManager() {
   }
 
-  private FileStorageManager() {
+  public static class Holder {
+    private static FileStorageManager sFileStorageManager = new FileStorageManager();
+
+    public static FileStorageManager getInstance() {
+      return sFileStorageManager;
+    }
   }
 
   public void init(Context context) {

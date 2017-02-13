@@ -26,16 +26,16 @@ public class HttpManager {
   public static final int TASK_RUNNING_ERROR_CODE = 3;
   public static final String TASK_RUNNING_ERROR_MESSAGE = "任务已经执行了";
 
-
-
   private HttpManager() {
     mClient = new OkHttpClient();
   }
 
-  private static HttpManager sHttpManager = new HttpManager();
+  public static class Holder {
+    private static HttpManager sHttpManager = new HttpManager();
 
-  public static HttpManager getInstance() {
-    return sHttpManager;
+    public static HttpManager getInstance() {
+      return sHttpManager;
+    }
   }
 
   private Context mContext;
@@ -94,7 +94,7 @@ public class HttpManager {
           callback.fail(NETWORK_CODE, NETWORK_MESSAGE);
           return;
         }
-        final File file = FileStorageManager.getInstance().getFileByName(url);
+        final File file = FileStorageManager.Holder.getInstance().getFileByName(url);
         FileOutputStream fos = new FileOutputStream(file);
         byte[] buff = new byte[1024 * 512];
         int len;

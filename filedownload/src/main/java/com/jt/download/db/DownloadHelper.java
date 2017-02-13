@@ -19,10 +19,12 @@ public class DownloadHelper {
   private DownloadHelper() {
   }
 
-  private static DownloadHelper sDownloadHelper = new DownloadHelper();
+  public static class Holder {
+    private static DownloadHelper sDownloadHelper = new DownloadHelper();
 
-  public static DownloadHelper getInstance() {
-    return sDownloadHelper;
+    public static DownloadHelper getInstance() {
+      return sDownloadHelper;
+    }
   }
 
   public void init(Context context) {
@@ -32,7 +34,6 @@ public class DownloadHelper {
     mSession = mMaster.newSession();
     mDao = mSession.getDownloadEntityDao();
   }
-
 
   public void insert(DownloadEntity entity) {
     mDao.insertOrReplace(entity);
@@ -44,5 +45,4 @@ public class DownloadHelper {
         .orderAsc(DownloadEntityDao.Properties.Thread_id)
         .list();
   }
-
 }

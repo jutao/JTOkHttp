@@ -29,17 +29,12 @@ public class DownloadManager {
 
   private List<DownloadEntity> mCache;
 
-  private DownloadManager() {
-  }
-
   static final int MAX_THREAD = 2;
 
   //线程池存活的时间，秒为单位
   private static final int KEEP_TIME = 60;
 
   private long mLength;
-
-  private static DownloadManager sDownloadManager = new DownloadManager();
 
   private static ExecutorService sLocalProgressPoll = Executors.newSingleThreadExecutor();
 
@@ -56,8 +51,15 @@ public class DownloadManager {
         }
       });
 
-  public static DownloadManager getInstance() {
-    return sDownloadManager;
+  private DownloadManager() {
+  }
+
+  public static class Holder {
+    private static DownloadManager sDownloadManager = new DownloadManager();
+
+    public static DownloadManager getInstance() {
+      return sDownloadManager;
+    }
   }
 
   private void finish(DownloadTask task) {
@@ -74,7 +76,7 @@ public class DownloadManager {
     }
     mHashSet.add(task);
 
-    mCache = DownloadHelper.getInstance().getAll(url);
+    mCache = DownloadHelper.Holder.getInstance().getAll(url);
     if (mCache == null || mCache.size() == 0) {
       mCache = new ArrayList<>(MAX_THREAD);
       doDownload(url, callback, task);
@@ -93,7 +95,7 @@ public class DownloadManager {
         while (true) {
           try {
             Thread.sleep(500);
-            File file = FileStorageManager.getInstance().getFileByName(url);
+            File file = FileStorageManager.Holder.getInstance().getFileByName(url);
             long fileLength = file.length();
             int progress = (int) (fileLength * 100.0 / mLength);
             callback.progress(progress);
@@ -111,7 +113,7 @@ public class DownloadManager {
 
   private void doDownload(final String url, final DownloadCallback callback,
       final DownloadTask task) {
-    HttpManager.getInstance().asyncRequest(url, new Callback() {
+    HttpManager.Holder.getInstance().asyncRequest(url, new Callback() {
       @Override public void onFailure(Call call, IOException e) {
         finish(task);
       }

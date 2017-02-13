@@ -13,9 +13,9 @@ import com.jt.download.http.HttpManager;
 public class OKApplication extends Application{
   @Override public void onCreate() {
     super.onCreate();
-    FileStorageManager.getInstance().init(this);
-    HttpManager.getInstance().init(this);
+    FileStorageManager.Holder.getInstance().init(this);
+    HttpManager.Holder.getInstance().init(this);
     Stetho.initializeWithDefaults(this);
-    DownloadHelper.getInstance().init(this);
+    DownloadHelper.Holder.getInstance().init(this);
   }
 }
