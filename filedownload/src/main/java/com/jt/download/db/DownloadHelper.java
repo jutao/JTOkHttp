@@ -19,12 +19,12 @@ public class DownloadHelper {
   private DownloadHelper() {
   }
 
-  public static class Holder {
-    private static DownloadHelper sDownloadHelper = new DownloadHelper();
+  public static DownloadHelper getInstance() {
+    return Holder.sDownloadHelper;
+  }
 
-    public static DownloadHelper getInstance() {
-      return sDownloadHelper;
-    }
+  private static class Holder {
+    private static DownloadHelper sDownloadHelper = new DownloadHelper();
   }
 
   public void init(Context context) {

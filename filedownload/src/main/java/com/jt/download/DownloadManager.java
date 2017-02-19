@@ -32,34 +32,42 @@ public class DownloadManager {
   static final int MAX_THREAD = 2;
 
   //线程池存活的时间，秒为单位
-  private static final int KEEP_TIME = 60;
+  static final int KEEP_TIME = 60;
+
+  static final int LOCAL_PROGRESS_SIZE = 1;
 
   private long mLength;
 
-  private static ExecutorService sLocalProgressPoll = Executors.newSingleThreadExecutor();
+  private static ExecutorService sLocalProgressPoll;
 
   private HashSet<DownloadTask> mHashSet = new HashSet<>();
 
-  private static final ThreadPoolExecutor sThreadPool =
-      new ThreadPoolExecutor(MAX_THREAD, MAX_THREAD, KEEP_TIME, TimeUnit.SECONDS,
-          new SynchronousQueue<Runnable>(), new ThreadFactory() {
-        private AtomicInteger mInteger = new AtomicInteger(1);
+  private static ThreadPoolExecutor sThreadPool;
 
-        @Override public Thread newThread(@NonNull Runnable runnable) {
-          //获取当前的值并自增
-          return new Thread(runnable, "download thread #" + mInteger.getAndIncrement());
-        }
-      });
+  public void init(DownloadConfig config) {
+    sThreadPool = new ThreadPoolExecutor(config.getCoreThreadSize(), config.getMaxThreadSize(),
+        config.getKeepTime(), TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
+        new ThreadFactory() {
+          private AtomicInteger mInteger = new AtomicInteger(1);
+
+          @Override public Thread newThread(@NonNull Runnable runnable) {
+            //获取当前的值并自增
+            return new Thread(runnable, "download thread #" + mInteger.getAndIncrement());
+          }
+        });
+
+    sLocalProgressPoll = Executors.newSingleThreadExecutor();
+  }
 
   private DownloadManager() {
   }
 
-  public static class Holder {
-    private static DownloadManager sDownloadManager = new DownloadManager();
+  public static DownloadManager getInstance() {
+    return Holder.sDownloadManager;
+  }
 
-    public static DownloadManager getInstance() {
-      return sDownloadManager;
-    }
+  private static class Holder {
+    private static DownloadManager sDownloadManager = new DownloadManager();
   }
 
   private void finish(DownloadTask task) {
@@ -76,7 +84,7 @@ public class DownloadManager {
     }
     mHashSet.add(task);
 
-    mCache = DownloadHelper.Holder.getInstance().getAll(url);
+    mCache = DownloadHelper.getInstance().getAll(url);
     if (mCache == null || mCache.size() == 0) {
       mCache = new ArrayList<>(MAX_THREAD);
       doDownload(url, callback, task);
@@ -95,7 +103,7 @@ public class DownloadManager {
         while (true) {
           try {
             Thread.sleep(500);
-            File file = FileStorageManager.Holder.getInstance().getFileByName(url);
+            File file = FileStorageManager.getInstance().getFileByName(url);
             long fileLength = file.length();
             int progress = (int) (fileLength * 100.0 / mLength);
             callback.progress(progress);
@@ -113,7 +121,7 @@ public class DownloadManager {
 
   private void doDownload(final String url, final DownloadCallback callback,
       final DownloadTask task) {
-    HttpManager.Holder.getInstance().asyncRequest(url, new Callback() {
+    HttpManager.getInstance().asyncRequest(url, new Callback() {
       @Override public void onFailure(Call call, IOException e) {
         finish(task);
       }

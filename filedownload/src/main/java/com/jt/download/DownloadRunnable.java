@@ -40,7 +40,7 @@ public class DownloadRunnable implements Runnable {
     //设置线程优先级为10，减少系统调度时间，使用UI线程获取更多CPU资源
     Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
-    Response response = HttpManager.Holder.getInstance().syncRequestByRange(mUrl, mStart, mEnd);
+    Response response = HttpManager.getInstance().syncRequestByRange(mUrl, mStart, mEnd);
     if (response == null && mCallback != null) {
       mCallback.fail(HttpManager.NETWORK_CODE, HttpManager.NETWORK_MESSAGE);
       return;
@@ -48,7 +48,7 @@ public class DownloadRunnable implements Runnable {
     if((mStart+mEntity.getProgress_position())>=mEnd){
       return;
     }
-    final File file = FileStorageManager.Holder.getInstance().getFileByName(mUrl);
+    final File file = FileStorageManager.getInstance().getFileByName(mUrl);
     try {
       RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
       randomAccessFile.seek(mStart);
@@ -67,7 +67,7 @@ public class DownloadRunnable implements Runnable {
       e.printStackTrace();
     }finally {
 
-      DownloadHelper.Holder.getInstance().insert(mEntity);
+      DownloadHelper.getInstance().insert(mEntity);
     }
   }
 

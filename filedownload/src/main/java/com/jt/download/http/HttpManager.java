@@ -29,13 +29,13 @@ public class HttpManager {
   private HttpManager() {
     mClient = new OkHttpClient();
   }
-
-  public static class Holder {
+  public static HttpManager getInstance() {
+    return Holder.sHttpManager;
+  }
+  private static class Holder {
     private static HttpManager sHttpManager = new HttpManager();
 
-    public static HttpManager getInstance() {
-      return sHttpManager;
-    }
+
   }
 
   private Context mContext;
@@ -94,7 +94,7 @@ public class HttpManager {
           callback.fail(NETWORK_CODE, NETWORK_MESSAGE);
           return;
         }
-        final File file = FileStorageManager.Holder.getInstance().getFileByName(url);
+        final File file = FileStorageManager.getInstance().getFileByName(url);
         FileOutputStream fos = new FileOutputStream(file);
         byte[] buff = new byte[1024 * 512];
         int len;

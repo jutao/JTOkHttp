@@ -17,12 +17,12 @@ public class FileStorageManager {
   private FileStorageManager() {
   }
 
-  public static class Holder {
-    private static FileStorageManager sFileStorageManager = new FileStorageManager();
+  public static FileStorageManager getInstance() {
+    return Holder.sFileStorageManager;
+  }
 
-    public static FileStorageManager getInstance() {
-      return sFileStorageManager;
-    }
+  private static class Holder {
+    private static FileStorageManager sFileStorageManager = new FileStorageManager();
   }
 
   public void init(Context context) {

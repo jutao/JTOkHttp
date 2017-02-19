@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
     mImageView = (ImageView) findViewById(R.id.image);
-    DownloadManager.Holder.getInstance()
+    DownloadManager.getInstance()
         .download("http://a4.pc6.com/lxf2/erzhanxiongyin.pc6.apk",
         //.download("http://2.im.guokr.com/iFZ14_ljcuSOKU0mPix1npXvEXCWKVZcLTrTKAiphU66AQAAFwEAAEpQ.jpg",
             new SuperDownloadCallback() {
