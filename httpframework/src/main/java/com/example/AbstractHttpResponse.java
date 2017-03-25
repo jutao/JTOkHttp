@@ -1,5 +1,6 @@
-package com.example.http;
+package com.example;
 
+import com.example.http.HttpResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
@@ -11,10 +12,8 @@ import java.util.zip.GZIPInputStream;
 public abstract class AbstractHttpResponse implements HttpResponse {
 
   private static final String GZIP = "gzip";
-  private InputStream body;
+  private InputStream body = getBodyInternal();
   private InputStream mGzipInputStream;
-
-
 
   private boolean isGzip() {
     String contentEncoding = getHeaders().getContentEncoding();
