@@ -1,5 +1,6 @@
-package com.example;
+package com.example.framework.impl.okhttp;
 
+import com.example.framework.BufferHttpRequest;
 import com.example.http.*;
 import com.example.http.OkHttpResponse;
 import java.io.IOException;
@@ -54,16 +55,4 @@ public class OkHttpRequest extends BufferHttpRequest {
     return URI.create(mUrl);
   }
 
-  @Override public void writeBody(Map<String, String> body) {
-    try {
-      StringBuilder sb = new StringBuilder();
-      for (Map.Entry<String, String> entry : body.entrySet()) {
-        sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&&");
-      }
-      sb.delete(sb.length() - 2, sb.length() - 1);
-      this.getBody().write(sb.toString().getBytes());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
 }

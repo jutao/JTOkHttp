@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import com.example.service.MyAPIProvider;
+import com.example.service.MyRequest;
+import com.example.service.MyResponse;
 import com.jt.download.DownloadManager;
 import com.jt.download.http.SuperDownloadCallback;
 import com.jt.download.utils.Logger;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +24,21 @@ public class MainActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    Map<String, String> body = new HashMap<>(2);
+    body.put("username", "jutao");
+    body.put("userage", "55");
+    MyAPIProvider.visitor("http://10.0.3.2:8080/web/HttpServlet", body, new MyResponse<String>() {
+      @Override public void success(MyRequest myRequest, String data) {
+        System.out.println(data);
+      }
+
+      @Override public void fail(int errorCode, String errorMsg) {
+        System.out.println(errorMsg);
+      }
+    });
+  }
+
+  private void downLoad() {
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
     mImageView = (ImageView) findViewById(R.id.image);
     DownloadManager.getInstance()

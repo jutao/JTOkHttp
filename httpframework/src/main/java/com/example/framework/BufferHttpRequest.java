@@ -1,4 +1,4 @@
-package com.example;
+package com.example.framework;
 
 import com.example.http.HttpHeader;
 import com.example.http.HttpResponse;

@@ -1,5 +1,6 @@
 package com.example.http;
 
+import com.example.framework.AbstractHttpResponse;
 import java.io.InputStream;
 import okhttp3.Response;
 
@@ -30,6 +31,10 @@ public class OkHttpResponse extends AbstractHttpResponse {
 
   @Override public String getStatusMsg() {
     return mResponse.message();
+  }
+
+  @Override public long getContentLength() {
+    return mResponse.body().contentLength();
   }
 
   @Override public HttpHeader getHeaders() {

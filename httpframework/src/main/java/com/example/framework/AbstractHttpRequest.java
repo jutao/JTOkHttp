@@ -1,11 +1,10 @@
-package com.example;
+package com.example.framework;
 
 import com.example.http.HttpHeader;
 import com.example.http.HttpRequest;
 import com.example.http.HttpResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -57,9 +56,10 @@ public abstract class AbstractHttpRequest implements HttpRequest {
     return response;
   }
 
-  public abstract void writeBody(Map<String,String> body);
 
   protected abstract HttpResponse executeInternal(HttpHeader header) throws IOException;
 
   public abstract OutputStream getBodyOutputStream();
+
+
 }

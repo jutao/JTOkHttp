@@ -16,4 +16,6 @@ public interface HttpResponse extends Header, Closeable {
   InputStream getBody() throws IOException;
 
   @Override void close() throws IOException;
+
+  long getContentLength();
 }
